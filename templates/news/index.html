@@ -1,0 +1,65 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<div class="lg:col-span-2 space-y-6">
+    <h2 class="text-3xl font-bold text-slate-800 border-b pb-2">{{ page_title }}</h2>
+
+    {% with lead_article=articles.object_list.0 %}
+        {% if lead_article %}
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+            <a href="{{ lead_article.get_absolute_url }}">
+                <div class="relative">
+                    <img src="{{ lead_article.image_url }}" alt="{{ lead_article.title }}" class="w-full h-auto max-h-[500px] object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/80 to-transparent">
+                        <span class="text-xs font-semibold uppercase text-blue-300 bg-blue-800/50 px-2 py-1 rounded">{{ lead_article.category.name }}</span>
+                        <h2 class="text-2xl md:text-4xl font-bold text-white mt-2 group-hover:underline">{{ lead_article.title }}</h2>
+                        <p class="text-slate-200 mt-2 hidden md:block">{{ lead_article.description|truncatewords:25 }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for article in articles|slice:"1:" %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden group">
+            <a href="{{ article.get_absolute_url }}">
+                <img src="{{ article.image_url }}" alt="{{ article.title }}" class="w-full h-48 object-cover group-hover:opacity-80 transition-opacity">
+                <div class="p-4">
+                    <span class="text-xs font-semibold uppercase text-blue-600">{{ article.category.name }}</span>
+                    <h3 class="font-bold text-lg mt-1 group-hover:text-blue-700 transition-colors">{{ article.title }}</h3>
+                    <div class="flex items-center text-xs text-slate-500 mt-2">
+                        <i data-feather="clock" class="h-4 w-4 mr-1"></i>
+                        <span>{{ article.published_at|timesince }} oldin</span>
+                        <span class="mx-2">|</span>
+                        <i data-feather="message-square" class="h-4 w-4 mr-1"></i>
+                        <span>{{ article.comments.count }} sharh</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p class="lg:col-span-2 text-slate-600">Sizning mezonlaringizga mos keladigan maqolalar topilmadi.</p>
+        {% endfor %}
+    </div>
+
+    {% if articles.has_other_pages %}
+    <div class="bg-white rounded-lg shadow-md mt-6 p-4 text-center">
+        {% if articles.has_previous %}
+            <a href="?page={{ articles.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="pagination-link">&laquo; Oldingisi</a>
+        {% endif %}
+        {% for i in articles.paginator.page_range %}
+            {% if articles.number == i %}
+                <span class="pagination-link active">{{ i }}</span>
+            {% else %}
+                <a href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="pagination-link">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if articles.has_next %}
+            <a href="?page={{ articles.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="pagination-link">Keyingisi &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
