@@ -1,137 +1,219 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bbclduz - {{ page_title }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="https://i.ibb.co/YF27PvdL/bbc.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .brand-gradient { background: linear-gradient(to right, #1e3a8a, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-link { position: relative; transition: color 0.3s ease, border-bottom-color 0.3s ease; padding-bottom: 1rem; border-bottom: 3px solid transparent; }
-        .nav-link.active { color: #2563eb; font-weight: 700; border-bottom-color: #2563eb; }
-        .nav-link:not(.active):hover { color: #3b82f6; }
-        .pagination-link { display: inline-block; padding: 0.5rem 1rem; margin: 0 0.25rem; border-radius: 0.375rem; transition: background-color 0.3s ease; }
-        .pagination-link.active { background-color: #2563eb; color: white; }
-        .pagination-link:not(.active) { background-color: white; color: #374151; }
-        .pagination-link:not(.active):hover { background-color: #f3f4f6; }
-        .prose { max-width: 100%; }
-        .prose h1, .prose h2, .prose h3 { color: #1e293b; }
-        .prose p { margin-bottom: 1em; line-height: 1.7; }
-        .prose img { border-radius: 0.5rem; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fdfcff;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.08'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41zM20 18.6l2.83-2.83 1.41 1.41L21.41 20l2.83 2.83-1.41 1.41L20 21.41l-2.83 2.83-1.41-1.41L18.59 20l-2.83-2.83 1.41-1.41L20 18.59z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            transition: padding-top 0.4s ease;
+        }
+        .brand-gradient {
+            background: linear-gradient(45deg, #4c1d95, #c026d3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        #main-header {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid #f3e8ff;
+            transition: all 0.3s ease-in-out;
+            z-index: 100;
+        }
+        #main-header.scrolled {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            width: 100%;
+            border-radius: 0;
+            box-shadow: 0 4px 15px -3px rgb(168 85 247 / 0.15);
+            animation: slideDown 0.4s ease-out;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+        }
+        .nav-link:hover { color: #9333ea; }
+        .nav-link.active {
+            color: #9333ea;
+            font-weight: 700;
+            background-color: #f3e8ff;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 1rem; /* 16px */
+            border: 1px solid #f3e8ff;
+            box-shadow: 0 4px 20px -5px rgb(168 85 247 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px -5px rgb(168 85 247 / 0.2);
+        }
+        #menu.mobile-active {
+            display: flex;
+            position: absolute;
+            top: 100%; left: 0; right: 0;
+            flex-direction: column;
+            background-color: white;
+            padding: 1rem 1.5rem 1.5rem;
+            box-shadow: 0 8px 10px -5px rgb(0 0 0 / 0.1);
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
     </style>
 </head>
-<body class="text-slate-800">
+<body>
 
-    <div class="container mx-auto px-4 py-6">
-        <header class="bg-white rounded-lg shadow-md p-4 mb-6">
-            <div class="flex justify-between items-center">
+    <header id="main-header" class="relative">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
                 <div class="flex items-center">
-                    <svg class="h-10 w-10 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3h2m-4 3h2m-4 3h2m-4 3h2"/></svg>
+                    <svg class="h-10 w-10 text-purple-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                     <a href="{% url 'home' %}" class="text-2xl md:text-3xl font-extrabold brand-gradient">bbclduz</a>
                 </div>
                 <div class="hidden md:block text-right">
-                    <p class="font-semibold text-slate-600" id="current-date">Yuklanmoqda...</p>
+                    <p class="font-bold text-slate-700" id="current-date">Yuklanmoqda...</p>
                     <p class="text-sm text-slate-500" id="current-time"></p>
                 </div>
-                <button id="menu-btn" class="md:hidden block"><i data-feather="menu" class="h-6 w-6"></i></button>
+                <button id="menu-btn" class="md:hidden block z-50"><i data-feather="menu" class="h-8 w-8 text-slate-700"></i></button>
             </div>
-            <nav id="menu" class="hidden md:flex justify-between items-center mt-4 border-t pt-2">
-                <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6">
+            <nav id="menu" class="hidden md:flex justify-between items-center pt-3 pb-3">
+                <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2">
                     <a href="{% url 'home' %}" class="nav-link font-semibold {% if not active_category %}active{% else %}text-slate-600{% endif %}">Bosh sahifa</a>
                     {% for category in categories %}
-                        <a href="{% url 'category_view' category.slug %}" class="nav-link font-semibold {% if active_category == category.slug %}active{% else %}text-slate-600{% endif %}">
-                           {{ category.name }}
-                        </a>
+                        <a href="{% url 'category_view' category.slug %}" class="nav-link font-semibold {% if active_category == category.slug %}active{% else %}text-slate-600{% endif %}">{{ category.name }}</a>
                     {% endfor %}
                 </div>
                 <form action="{% url 'search_view' %}" method="get" class="relative mt-4 md:mt-0">
-                    <input type="text" name="q" placeholder="Yangiliklarni qidirish..." value="{{ request.GET.q }}" class="bg-slate-100 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-auto">
+                    <input type="text" name="q" placeholder="Qidirish..." value="{{ request.GET.q }}" class="bg-purple-50 border-purple-200 border rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-purple-400 w-full md:w-64">
                     <button type="submit" class="absolute inset-y-0 left-0 pl-3 flex items-center"><i data-feather="search" class="h-5 w-5 text-slate-400"></i></button>
                 </form>
             </nav>
-        </header>
+        </div>
+    </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {% block content %}
-            {% endblock %}
-
-            <aside class="space-y-6">
-                <div class="bg-white rounded-lg shadow-md p-4">
-                    <h3 class="text-xl font-bold border-b pb-2 mb-4">So'nggi yangiliklar</h3>
-                    <div class="space-y-4">
+    <div class="container mx-auto px-4 py-8">
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-8">
+                {% block content %}
+                <div class="card p-6">
+                    <h1 class="text-3xl font-extrabold mb-4 text-slate-800">Content Block</h1>
+                    <p class="text-slate-600">Your main page content, like a list of articles, will be displayed here. This is just a placeholder.</p>
+                </div>
+                {% endblock %}
+            </div>
+            <aside class="space-y-8">
+                <div class="card p-6">
+                    <h3 class="text-xl font-extrabold border-b border-purple-100 pb-3 mb-5 text-slate-800">So'nggi yangiliklar</h3>
+                    <div class="space-y-5">
                         {% for article in latest_news %}
-                        <div class="group flex items-start space-x-3">
-                            <div class="w-16 h-16 bg-slate-200 rounded-md flex-shrink-0 overflow-hidden">
-                                <img src="{{ article.image_url }}" alt="{{ article.title }}" class="w-full h-full object-cover">
+                        <div class="group flex items-start space-x-4">
+                            <div class="w-16 h-16 rounded-lg flex-shrink-0 overflow-hidden">
+                                <img src="{{ article.image_url }}" alt="{{ article.title }}" class="w-full h-full object-cover rounded-lg group-hover:scale-110 transition-transform duration-300">
                             </div>
                             <div>
-                                <a href="{{ article.get_absolute_url }}" class="font-semibold hover:text-blue-600 transition-colors group-hover:underline">{{ article.title }}</a>
-                                <p class="text-xs text-slate-500 mt-1">{{ article.published_at|timesince }} oldin</p>
+                                <a href="{{ article.get_absolute_url }}" class="font-bold leading-tight text-slate-700 hover:text-purple-600 transition-colors">{{ article.title }}</a>
+                                <p class="text-sm text-slate-500 mt-2">{{ article.published_at|timesince }} oldin</p>
                             </div>
                         </div>
                         {% empty %}
-                        <p>So'nggi yangiliklar mavjud emas.</p>
+                        <p class="text-slate-500">So'nggi yangiliklar mavjud emas.</p>
                         {% endfor %}
                     </div>
                 </div>
-
-                <div class="bg-white rounded-lg shadow-md p-4">
-                    <h3 class="text-xl font-bold border-b pb-2 mb-4">Ommabop Teglar</h3>
-                    <div class="flex flex-wrap gap-2">
+                <div class="card p-6">
+                    <h3 class="text-xl font-extrabold border-b border-purple-100 pb-3 mb-5 text-slate-800">Ommabop Teglar</h3>
+                    <div class="flex flex-wrap gap-3">
                         {% for tag in popular_tags %}
-                            <a href="{% url 'tag_view' tag.slug %}" class="bg-slate-100 text-slate-600 text-sm font-medium px-3 py-1 rounded-full hover:bg-blue-500 hover:text-white transition-colors">
-                                #{{ tag.name }}
-                            </a>
+                            <a href="{% url 'tag_view' tag.slug %}" class="bg-amber-400 text-amber-900 font-bold text-sm px-4 py-1.5 rounded-full hover:bg-amber-500 hover:shadow-lg hover:shadow-amber-500/20 transition-all transform hover:-translate-y-0.5">#{{ tag.name }}</a>
                         {% empty %}
-                            <p>Teglar mavjud emas.</p>
+                            <p class="text-slate-500">Teglar mavjud emas.</p>
                         {% endfor %}
                     </div>
                 </div>
-
-               <div class="bg-white rounded-lg shadow-md p-4">
-                    <h3 class="text-xl font-bold border-b pb-2 mb-4">So'nggi sharhlar</h3>
-                    <div class="space-y-4">
-                        {% for comment in recent_comments %}
-                        <a href="{{ comment.article.get_absolute_url }}#comment-{{ comment.id }}" class="block bg-slate-50 p-3 rounded-lg hover:bg-slate-100 transition-colors">
-                            <p class="font-semibold text-slate-700">{{ comment.body|truncatewords:15 }}</p>
-                            <p class="text-sm text-slate-500 mt-2 text-right">-{{ comment.author }}</p>
-                        </a>
-                        {% empty %}
-                        <p>Hali sharhlar mavjud emas.</p>
-                        {% endfor %}
-                    </div>
-                </div>
+                <div class="card p-6">
+                     <h3 class="text-xl font-extrabold border-b border-purple-100 pb-3 mb-5 text-slate-800">So'nggi sharhlar</h3>
+                     <div class="space-y-4">
+                         {% for comment in recent_comments %}
+                         <a href="{{ comment.article.get_absolute_url }}#comment-{{ comment.id }}" class="block bg-purple-50 p-4 rounded-xl hover:bg-purple-100 transition-all">
+                             <p class="font-semibold text-slate-800">"{{ comment.body|truncatewords:15 }}"</p>
+                             <p class="text-sm text-slate-500 mt-3 text-right font-medium">- {{ comment.author }}</p>
+                         </a>
+                         {% empty %}
+                         <p class="text-slate-500">Hali sharhlar mavjud emas.</p>
+                         {% endfor %}
+                     </div>
+                 </div>
             </aside>
         </main>
-
-        <footer class="bg-white rounded-lg shadow-md mt-6 p-6 text-center">
-            <p>&copy; {% now "Y" %} bbclduz. Barcha huquqlar himoyalangan.</p>
-        </footer>
     </div>
+
+    <footer class="bg-gray-800 mt-10 p-8 text-center text-white">
+        <div class="container mx-auto">
+            <p class="text-lg">&copy; {% now "Y" %} bbclduz. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
 
     <script>
         feather.replace();
-        document.getElementById('menu-btn')?.addEventListener('click', () => {
-            const menu = document.getElementById('menu');
+        const menuBtn = document.getElementById('menu-btn');
+        const menu = document.getElementById('menu');
+        const header = document.getElementById('main-header');
+        
+        menuBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
             menu.classList.toggle('hidden');
-            const icon = document.getElementById('menu-btn').querySelector('i');
+            menu.classList.toggle('mobile-active');
+            const icon = menuBtn.querySelector('i');
             icon.setAttribute('data-feather', menu.classList.contains('hidden') ? 'menu' : 'x');
             feather.replace();
         });
+
         function updateTime() {
             const now = new Date();
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Tashkent' };
             const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Tashkent' };
-            document.getElementById('current-date').textContent = now.toLocaleDateString('uz-UZ', dateOptions);
-            document.getElementById('current-time').textContent = now.toLocaleTimeString('uz-UZ', timeOptions);
+            const dateEl = document.getElementById('current-date');
+            const timeEl = document.getElementById('current-time');
+            if (dateEl) dateEl.textContent = now.toLocaleDateString('uz-UZ', dateOptions);
+            if (timeEl) timeEl.textContent = now.toLocaleTimeString('uz-UZ', timeOptions);
         }
         updateTime();
         setInterval(updateTime, 1000);
+
+        let headerHeight = header.offsetHeight;
+        const handleScroll = () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+                document.body.style.paddingTop = `${headerHeight}px`;
+            } else {
+                header.classList.remove('scrolled');
+                document.body.style.paddingTop = '0';
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', () => {
+            if (!header.classList.contains('scrolled')) {
+                headerHeight = header.offsetHeight;
+            }
+        });
     </script>
 </body>
 </html>
