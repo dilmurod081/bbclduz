@@ -1,0 +1,32 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<div class="lg:col-span-2 bg-white rounded-lg shadow-md p-6 md:p-8">
+    <h1 class="text-3xl font-extrabold text-slate-900 mb-6 border-b pb-4">Yangi maqola qo'shish</h1>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="space-y-6">
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-slate-700 mb-2">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <p class="text-xs text-slate-500 mt-1">{{ field.help_text }}</p>
+                {% endif %}
+                {% for error in field.errors %}
+                    <p class="text-sm text-red-600 mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-8 pt-6 border-t">
+            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors text-lg">
+                Maqolani saqlash
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
